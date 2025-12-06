@@ -228,6 +228,11 @@ const sidebars = {
               id: "workflows/run-methods/restart",
               label: ".restart()",
             },
+            {
+              type: "doc",
+              id: "workflows/run-methods/timeTravel",
+              label: ".timeTravel()",
+            },
           ],
         },
       ],
@@ -270,13 +275,8 @@ const sidebars = {
             },
             {
               type: "doc",
-              id: "streaming/workflows/streamVNext",
-              label: ".streamVNext()",
-            },
-            {
-              type: "doc",
-              id: "streaming/workflows/resumeStreamVNext",
-              label: ".resumeStreamVNext()",
+              id: "streaming/workflows/resumeStream",
+              label: ".resumeStream()",
             },
             {
               type: "doc",
@@ -285,8 +285,8 @@ const sidebars = {
             },
             {
               type: "doc",
-              id: "streaming/workflows/observeStreamVNext",
-              label: ".observeStreamVNext()",
+              id: "streaming/workflows/timeTravelStream",
+              label: ".timeTravelStream()",
             },
           ],
         },
@@ -407,6 +407,16 @@ const sidebars = {
           id: "vectors/couchbase",
           label: "Couchbase Vector Store",
         },
+        {
+          type: "doc",
+          id: "vectors/duckdb",
+          label: "DuckDB Vector Store",
+        },
+        {
+          type: "doc",
+          id: "vectors/elasticsearch",
+          label: "ElasticSearch Vector Store",
+        },
         { type: "doc", id: "vectors/lance", label: "Lance Vector Store" },
         { type: "doc", id: "vectors/libsql", label: "LibSQL Vector Store" },
         { type: "doc", id: "vectors/mongodb", label: "MongoDB Vector Store" },
@@ -424,6 +434,22 @@ const sidebars = {
           label: "Turbopuffer Vector Store",
         },
         { type: "doc", id: "vectors/upstash", label: "Upstash Vector Store" },
+      ],
+    },
+    {
+      type: "category",
+      label: "Server",
+      collapsed: true,
+      items: [
+        {
+          type: "doc",
+          id: "server/mastra-server",
+          label: "MastraServer",
+        },
+        { type: "doc", id: "server/hono-adapter", label: "Hono Adapter" },
+        { type: "doc", id: "server/express-adapter", label: "Express Adapter" },
+        { type: "doc", id: "server/create-route", label: "createRoute()" },
+        { type: "doc", id: "server/routes", label: "Server Routes" },
       ],
     },
     {
@@ -464,6 +490,36 @@ const sidebars = {
           id: "client-js/mastra-client",
           label: "Mastra Client SDK",
         },
+      ],
+    },
+    {
+      type: "category",
+      label: "AI SDK",
+      collapsed: true,
+      items: [
+        { type: "doc", id: "ai-sdk/chat-route", label: "chatRoute()" },
+        {
+          type: "doc",
+          id: "ai-sdk/handle-chat-stream",
+          label: "handleChatStream()",
+        },
+        {
+          type: "doc",
+          id: "ai-sdk/handle-network-stream",
+          label: "handleNetworkStream()",
+        },
+        {
+          type: "doc",
+          id: "ai-sdk/handle-workflow-stream",
+          label: "handleWorkflowStream()",
+        },
+        { type: "doc", id: "ai-sdk/network-route", label: "networkRoute()" },
+        {
+          type: "doc",
+          id: "ai-sdk/to-ai-sdk-stream",
+          label: "toAISdkStream()",
+        },
+        { type: "doc", id: "ai-sdk/workflow-route", label: "workflowRoute()" },
       ],
     },
     {
@@ -549,6 +605,11 @@ const sidebars = {
                   type: "doc",
                   id: "observability/tracing/exporters/otel",
                   label: "OtelExporter",
+                },
+                {
+                  type: "doc",
+                  id: "observability/tracing/exporters/posthog",
+                  label: "PostHogExporter",
                 },
               ],
             },

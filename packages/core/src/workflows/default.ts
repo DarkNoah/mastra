@@ -25,7 +25,7 @@ import type { ExecuteSleepParams, ExecuteSleepUntilParams } from './handlers/sle
 import { executeSleep as executeSleepHandler, executeSleepUntil as executeSleepUntilHandler } from './handlers/sleep';
 import type { ExecuteStepParams } from './handlers/step';
 import { executeStep as executeStepHandler } from './handlers/step';
-import type { ConditionFunction, ExecuteFunctionParams, Step } from './step';
+import type { ConditionFunction, ConditionFunctionParams, Step } from './step';
 import type {
   DefaultEngineType,
   Emitter,
@@ -176,7 +176,7 @@ export class DefaultExecutionEngine extends ExecutionEngine {
   async evaluateCondition(
     conditionFn: ConditionFunction<any, any, any, any, DefaultEngineType>,
     index: number,
-    context: ExecuteFunctionParams<any, any, any, any, DefaultEngineType>,
+    context: ConditionFunctionParams<any, any, any, any, DefaultEngineType>,
     operationId: string,
   ): Promise<number | null> {
     return this.wrapDurableOperation(operationId, async () => {
@@ -322,14 +322,6 @@ export class DefaultExecutionEngine extends ExecutionEngine {
   }
 
   /**
-   * Whether to include input in the workflow result.
-   * Override to false in subclasses that don't need input in the result.
-   */
-  protected get includeInputInResult(): boolean {
-    return true;
-  }
-
-  /**
    * Format an error for the workflow result.
    * Override to customize error formatting (e.g., include stack traces).
    */
@@ -352,7 +344,7 @@ export class DefaultExecutionEngine extends ExecutionEngine {
     const base: any = {
       status: lastOutput.status,
       steps: stepResults,
-      ...(this.includeInputInResult && { input: stepResults.input }),
+      input: stepResults.input,
     };
 
     if (lastOutput.status === 'success') {
@@ -423,7 +415,7 @@ export class DefaultExecutionEngine extends ExecutionEngine {
    * Apply mutable context changes back to the execution context.
    */
   applyMutableContext(executionContext: ExecutionContext, mutableContext: MutableContext): void {
-    executionContext.state = mutableContext.state;
+    Object.assign(executionContext.state, mutableContext.state);
     Object.assign(executionContext.suspendedPaths, mutableContext.suspendedPaths);
     Object.assign(executionContext.resumeLabels, mutableContext.resumeLabels);
   }
@@ -602,10 +594,13 @@ export class DefaultExecutionEngine extends ExecutionEngine {
             },
           });
         }
-        if (lastOutput.result.status === 'suspended' && params.outputOptions?.includeResumeLabels) {
-          return { ...result, resumeLabels: lastOutput.mutableContext.resumeLabels };
-        }
-        return result;
+        return {
+          ...result,
+          ...(lastOutput.result.status === 'suspended' && params.outputOptions?.includeResumeLabels
+            ? { resumeLabels: lastOutput.mutableContext.resumeLabels }
+            : {}),
+          ...(params.outputOptions?.includeState ? { state: lastState } : {}),
+        };
       }
     }
 
